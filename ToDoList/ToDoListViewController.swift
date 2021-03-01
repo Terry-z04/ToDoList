@@ -18,7 +18,34 @@ class ToDoListViewController: UIViewController {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
+        loadData()
+    }
+    
+    func loadData() {
+        let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let documentURL = directoryURL.appendingPathComponent("todo").appendingPathExtension("json")
         
+        guard let data = try? Data(contentsOf: documentURL) else {return}
+        let jsonDecoder = JSONDecoder()
+        do {
+            toDoItems = try jsonDecoder.decode(Array<ToDoItem>.self, from: data)
+            tableView.reloadData()
+        } catch {
+            print("😡 ERROR: Could not load data \(error.localizedDescription)")
+        }
+    }
+    
+    
+    func saveData() {
+        let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let documentURL = directoryURL.appendingPathComponent("todo").appendingPathExtension("json")
+        let jsonEncoder = JSONEncoder()
+        let data = try? jsonEncoder.encode(toDoItems)
+        do {
+            try data?.write(to: documentURL, options: .noFileProtection)
+        } catch {
+            print("😡 ERROR: Could not save data \(error.localizedDescription)")
+        }
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -44,6 +71,7 @@ class ToDoListViewController: UIViewController {
             tableView.insertRows(at: [newIndexPath], with: .bottom)
             tableView.scrollToRow(at: newIndexPath, at: .bottom, animated: true)
         }
+        saveData()
     }
     @IBAction func editButtonPressed(_ sender: UIBarButtonItem) {
         if tableView.isEditing {
@@ -75,6 +103,7 @@ extension ToDoListViewController: UITableViewDelegate, UITableViewDataSource {
         if editingStyle == .delete {
             toDoItems.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
+            saveData()
         }
     }
     
@@ -82,6 +111,7 @@ extension ToDoListViewController: UITableViewDelegate, UITableViewDataSource {
         let itemToMove = toDoItems[sourceIndexPath.row]
         toDoItems.remove(at: sourceIndexPath.row)
         toDoItems.insert(itemToMove, at: sourceIndexPath.row)
+        saveData()
     }
     
 }
