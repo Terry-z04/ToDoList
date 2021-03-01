@@ -7,6 +7,14 @@
 
 import UIKit
 
+private let dateFormatter: DateFormatter = {
+    print("📆 I JUST CREATED A DATE FORMATTER!")
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateStyle = .short
+    dateFormatter.timeStyle = .short
+    return dateFormatter
+}()
+
 class ToDoDetailTableViewController: UITableViewController {
    
     @IBOutlet weak var saveBarButton: UIBarButtonItem!
@@ -27,14 +35,9 @@ class ToDoDetailTableViewController: UITableViewController {
         super.viewDidLoad()
         
         if toDoItem == nil {
-            toDoItem = ToDoItem(name: "", date: Date(), notes: "", reminderSet: false)
+            toDoItem = ToDoItem(name: "", date: Date().addingTimeInterval(24*60*60), notes: "", reminderSet: false)
             }
         undateUserInterface()
-//        if reminderSwitch.isOn {
-//            dateLabel.textColor = .black
-//        } else {
-//            dateLabel.textColor = .gray
-//        }
     }
     
     func undateUserInterface() {
@@ -43,10 +46,11 @@ class ToDoDetailTableViewController: UITableViewController {
         noteView.text = toDoItem.notes
         reminderSwitch.isOn = toDoItem.reminderSet
         dateLabel.textColor = (reminderSwitch.isOn ? .black : .gray)
+        dateLabel.text = dateFormatter.string(from: toDoItem.date)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        toDoItem = ToDoItem(name: nameField.text!, date: Date(), notes: noteView.text, reminderSet: reminderSwitch.isOn)
+        toDoItem = ToDoItem(name: nameField.text!, date: datePicker.date, notes: noteView.text, reminderSet: reminderSwitch.isOn)
     }
     
     @IBAction func cancelButtonPressed(_ sender: UIBarButtonItem) {
@@ -64,7 +68,10 @@ class ToDoDetailTableViewController: UITableViewController {
         tableView.endUpdates()
     }
     
-
+    @IBAction func datePickerChanged(_ sender: UIDatePicker) {
+        dateLabel.text = dateFormatter.string(from: sender.date)
+    }
+    
 }
 
 extension ToDoDetailTableViewController {
