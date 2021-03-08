@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3446B6ED25F6804000E741A6 /* LocalNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3446B6EC25F6804000E741A6 /* LocalNotificationManager.swift */; };
 		345FEBC025E7FC0100CF712E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345FEBBF25E7FC0100CF712E /* AppDelegate.swift */; };
 		345FEBC225E7FC0100CF712E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345FEBC125E7FC0100CF712E /* SceneDelegate.swift */; };
 		345FEBC425E7FC0100CF712E /* ToDoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 345FEBC325E7FC0100CF712E /* ToDoListViewController.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3446B6EC25F6804000E741A6 /* LocalNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationManager.swift; sourceTree = "<group>"; };
 		345FEBBC25E7FC0100CF712E /* ToDoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		345FEBBF25E7FC0100CF712E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		345FEBC125E7FC0100CF712E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 			children = (
 				345FEBBF25E7FC0100CF712E /* AppDelegate.swift */,
 				345FEBC125E7FC0100CF712E /* SceneDelegate.swift */,
+				3446B6EC25F6804000E741A6 /* LocalNotificationManager.swift */,
 				347F799625ED4E3900E7D9B1 /* ToDoItem.swift */,
 				3484DAA525F5DE8100A2CECD /* ToDoItems.swift */,
 				345FEBC325E7FC0100CF712E /* ToDoListViewController.swift */,
@@ -155,6 +158,7 @@
 				347F799725ED4E3900E7D9B1 /* ToDoItem.swift in Sources */,
 				34C2EF6325EC65FD00D7042B /* ToDoDetailTableViewController.swift in Sources */,
 				345FEBC225E7FC0100CF712E /* SceneDelegate.swift in Sources */,
+				3446B6ED25F6804000E741A6 /* LocalNotificationManager.swift in Sources */,
 				3484DA9825F58C6000A2CECD /* ListTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
