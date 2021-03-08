@@ -25,7 +25,7 @@ class ToDoListViewController: UIViewController {
             self.tableView.reloadData()
         }
         
-        LocalNotificationManager.autherizeLocalNotification()
+        LocalNotificationManager.autherizeLocalNotification(viewController: self) //可以直接写ToDoListViewController吗？
     }
     
 
