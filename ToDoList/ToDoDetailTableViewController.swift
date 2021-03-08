@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 private let dateFormatter: DateFormatter = {
     print("📆 I JUST CREATED A DATE FORMATTER!")
@@ -23,16 +24,32 @@ class ToDoDetailTableViewController: UITableViewController {
     @IBOutlet weak var noteView: UITextView!
     @IBOutlet weak var reminderSwitch: UISwitch!
     @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var compactDatePicker: UIDatePicker!
+    
     
     var toDoItem: ToDoItem!
     
     let datePickerIndexPath = IndexPath(row: 1, section: 1)
     let notesTextViewIndexPath = IndexPath(row: 0, section: 2)
     let notesRowHeight: CGFloat = 200
-    let defaultRowHeifht: CGFloat = 44
+    let defaultRowHeight: CGFloat = 44
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // show or hide the appropriate date picker
+        if #available(iOS 14.0, *) { // use compact version if it's > iOS 14.0
+            datePicker = compactDatePicker
+            datePicker.isHidden = false
+            dateLabel.isHidden = true
+        } else { // use old .wheel version if it's < iOS 14.0
+            compactDatePicker.isHidden = true
+            dateLabel.isHidden = false
+        }
+        
+        // setup foreground notification
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(appActiveNotification), name: UIApplication.didBecomeActiveNotification, object: nil)
+        
         // hide keyboard if we tap outside of a field or view
         let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
         tap.cancelsTouchesInView = false
@@ -46,6 +63,11 @@ class ToDoDetailTableViewController: UITableViewController {
         undateUserInterface()
     }
     
+    @objc func appActiveNotification() {
+        print("😮 The app just came to the foreground - cool!")
+        updateReminderSwitch()
+    }
+    
     func undateUserInterface() {
         nameField.text = toDoItem.name
         datePicker.date = toDoItem.date
@@ -53,6 +75,7 @@ class ToDoDetailTableViewController: UITableViewController {
         reminderSwitch.isOn = toDoItem.reminderSet
         dateLabel.textColor = (reminderSwitch.isOn ? .black : .gray)
         dateLabel.text = dateFormatter.string(from: toDoItem.date)
+        datePicker.isEnabled = reminderSwitch.isOn
         enableDisableSaveButton(text: nameField.text!)
         updateReminderSwitch()
     }
@@ -66,6 +89,7 @@ class ToDoDetailTableViewController: UITableViewController {
                 }
                 self.view.endEditing(true)
                 self.dateLabel.textColor = (self.reminderSwitch.isOn ? .black : .gray)
+                self.datePicker.isEnabled = self.reminderSwitch.isOn
                 self.tableView.beginUpdates()
                 self.tableView.endUpdates()
             }
@@ -113,11 +137,15 @@ extension ToDoDetailTableViewController {
     override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath {
         case datePickerIndexPath:
-            return reminderSwitch.isOn ? datePicker.frame.height : 0
+            if #available(iOS 14.0, *) {
+                return 0
+            } else {
+                return reminderSwitch.isOn ? datePicker.frame.height : 0
+            }
         case notesTextViewIndexPath:
             return notesRowHeight
         default:
-            return defaultRowHeifht
+            return defaultRowHeight
         }
     }
 }
